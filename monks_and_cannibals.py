@@ -66,11 +66,11 @@ class MonksAndCannibals(SearchProblem):
     
     def actions(self, state):
         possible_moves = [
-            [1, 0, state[BOAT]], # 1 monk
-            [2, 0, state[BOAT]], # 2 monks
-            [1, 1, state[BOAT]], # 1 monk y 1 cannibal
-            [0, 1, state[BOAT]], # 1 cannibal
-            [0, 2, state[BOAT]]  # 2 cannibals
+            [1, 0], # 1 monk
+            [2, 0], # 2 monks
+            [1, 1], # 1 monk y 1 cannibal
+            [0, 1], # 1 cannibal
+            [0, 2]  # 2 cannibals
         ]
         available_moves = []
         
