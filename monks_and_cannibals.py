@@ -1,15 +1,37 @@
+"""
+Problem: Monks and Cannibals
+
+Goal:
+Safely transport 3 monks and 3 cannibals from the right shore of a river to the left shore
+using a boat that can carry at most 2 people at a time.
+
+Constraints:
+- The boat cannot cross the river by itself; it needs at least one person to operate.
+- At any moment (on either shore), if the number of cannibals exceeds the number of monks,
+  the monks will be eaten. Thus, this configuration is invalid.
+- Only two people can travel in the boat at the same time (either 1 or 2).
+- The boat can travel back and forth between the shores.
+
+Initial State:
+All 3 monks and 3 cannibals are on the right shore, and the boat is also on the right shore.
+
+Objective:
+Find a sequence of valid moves that brings all monks and cannibals to the left shore
+without violating any of the constraints.
+"""
+
 from simpleai.search import (
     SearchProblem,
     breadth_first,
     limited_depth_first,
 )
 
-# Estado => ( orilla_izq , orilla_der , post_bote)
+# State => ( left_shote , right_pos , boat_pos)
 INITIAL_STATE = ((0,0),(3,3),1) 
 LEFT_SHORE = 0
 RIGHT_SHORE = 1
 
-# Orilla => (monjes, canibales)
+# Shore => (monk, cannibal)
 MONK = 0
 CANNIBAL = 1
 BOAT = 2
@@ -21,7 +43,7 @@ def more_monks(shore):
 
 def readable_path(full_path):
     steps = []
-    for _, step in full_path: # _, step ignora el primer elemento de la lista
+    for _, step in full_path:
 
         direction = "<--" if step[BOAT] == LEFT_SHORE else "-->"
         left_shore =  ( "M" * step[LEFT_SHORE][MONK] ) + ( "C" * step[LEFT_SHORE][CANNIBAL] )
@@ -44,11 +66,11 @@ class MonksAndCannibals(SearchProblem):
     
     def actions(self, state):
         possible_moves = [
-            [1, 0, state[BOAT]], # 1 monje
-            [2, 0, state[BOAT]], # 2 monjes
-            [1, 1, state[BOAT]], # 1 monje y 1 canibal
-            [0, 1, state[BOAT]], # 1 canibal
-            [0, 2, state[BOAT]]  # 2 canibales
+            [1, 0, state[BOAT]], # 1 monk
+            [2, 0, state[BOAT]], # 2 monks
+            [1, 1, state[BOAT]], # 1 monk y 1 cannibal
+            [0, 1, state[BOAT]], # 1 cannibal
+            [0, 2, state[BOAT]]  # 2 cannibals
         ]
         available_moves = []
         
@@ -62,7 +84,7 @@ class MonksAndCannibals(SearchProblem):
     
     def is_valid(self, state):
         
-        if( any(val < 0 for val in state[LEFT_SHORE]) ): # Comprueba si algun valor en la lista es negativo
+        if( any(val < 0 for val in state[LEFT_SHORE]) ):
             return False
 
         if( any(val < 0 for val in state[RIGHT_SHORE]) ):
